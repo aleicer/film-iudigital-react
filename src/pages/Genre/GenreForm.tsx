@@ -17,9 +17,11 @@ interface GenreFormProps {
   isEditing: boolean;
   onClose: () => void;
   onSuccess: () => void;
+  createGenre: (genre: Omit<GenreType, '_id' | 'createdAt' | 'updatedAt' | '__v'>) => Promise<GenreType>;
+  updateGenre: (genre: GenreType) => Promise<GenreType>;
 }
 
-export default function GenreForm({ currentGenre, isEditing, onClose, onSuccess }: GenreFormProps) {
+export default function GenreForm({ currentGenre, isEditing, onClose, onSuccess, createGenre, updateGenre }: GenreFormProps) {
   const [genre, setGenre] = useState<GenreType>({
     _id: '',
     name: '',
@@ -36,9 +38,10 @@ export default function GenreForm({ currentGenre, isEditing, onClose, onSuccess 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (isEditing) {
-      // Lógica de actualización (usar la función updateGenre)
+      await updateGenre(genre);
     } else {
-      // Lógica de creación (usar la función createGenre)
+      const { _id, ...newGenre } = genre 
+      await createGenre(newGenre);
     }
     onSuccess(); // Llamamos a onSuccess para refrescar la lista y cerrar el modal
   };
@@ -53,6 +56,12 @@ export default function GenreForm({ currentGenre, isEditing, onClose, onSuccess 
               label="Nombre"
               value={genre.name}
               onChange={(e) => setGenre({ ...genre, name: e.target.value })}
+              required
+            />
+            <Input
+              label="Descripción"
+              value={genre.description}
+              onChange={(e) => setGenre({ ...genre, description: e.target.value })}
               required
             />
             <Checkbox

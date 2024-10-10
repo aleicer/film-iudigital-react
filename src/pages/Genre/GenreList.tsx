@@ -10,7 +10,7 @@ import {
   Tooltip,
 } from '@nextui-org/react';
 import { toast } from 'react-toastify';
-import { getAllGenres, deleteGenre } from '../../services/genreService';
+import { getAllGenres, deleteGenre, createGenre, updateGenre } from '../../services/genreService';
 import GenreForm from './GenreForm';
 import { GenreType } from '../../types/Genre';
 
@@ -93,6 +93,8 @@ export default function GenreList() {
           isEditing={isEditing}
           onClose={handleModalClose}
           onSuccess={handleSuccess}
+          createGenre={createGenre}
+          updateGenre={updateGenre}
         />
       )}
     </div>
